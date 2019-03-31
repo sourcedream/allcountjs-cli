@@ -48,13 +48,13 @@ program
         var appConfig = opts.app || 'app-config';
         var dbUrl = opts.db || ('mongodb://localhost:27017/' + currentPackageJson.name);
 
-        if (!fs.existsSync('./node_modules/allcountjs/allcount.js')) {
+        if (!fs.existsSync('./node_modules/@sourcedream/allcountjs/allcount.js')) {
             console.log("AllcountJS isn't installed. Please run `npm install` first.");
             process.exit(1);
             return;
         }
         console.log("Using db url: " + dbUrl);
-        child_process.fork('./node_modules/allcountjs/allcount.js', { stdio: 'inherit', env: {DB_URL: dbUrl, APP: appConfig} });
+        child_process.fork('./node_modules/@sourcedream/allcountjs/allcount.js', { stdio: 'inherit', env: {DB_URL: dbUrl, APP: appConfig} });
     });
 
 var initAppTemplate = function (appName, template, authorName, authorEmail, description) {
@@ -105,9 +105,9 @@ var initAppTemplate = function (appName, template, authorName, authorEmail, desc
                         }
                     });
                 });
-            })
-        })
-    })
+            });
+        });
+    });
 };
 
 program
@@ -142,21 +142,20 @@ function write(p, str, mode, fn) {
         if (err) throw err;
         fs.writeFileSync(p, str, {mode: mode || 0666});
         console.log('   \x1b[36mcreate\x1b[0m : ' + p);
-        fn && fn();
-    })
+        if (fn) fn();
+    });
 }
 
 function mkdir(path, fn) {
     mkdirp(path, 0755, function (err) {
         if (err) throw err;
         console.log('   \033[36mcreate\033[0m : ' + path);
-        fn && fn();
+        if (fn) fn();
     });
 }
 
 function launchedFromCmd() {
-    return process.platform === 'win32'
-        && process.env._ === undefined;
+    return process.platform === 'win32' && process.env._ === undefined;
 }
 
 program.parse(process.argv);
