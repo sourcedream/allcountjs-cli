@@ -69,7 +69,7 @@ var initAppTemplate = function (appName, template, authorName, authorEmail, desc
         },
         description: description,
         dependencies: {
-            "allcountjs": "^1.14.5"
+            "@sourcedream/allcountjs": "^1.24.2"
         },
         scripts: {
             start: "./node_modules/.bin/allcountjs --app app-config"
