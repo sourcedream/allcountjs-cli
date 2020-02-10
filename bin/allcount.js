@@ -80,31 +80,25 @@ var initAppTemplate = function (appName, template, authorName, authorEmail, desc
     mkdir(appName, function () {
         write(path.join(appName, 'package.json'), JSON.stringify(packageJson, null, 2));
         mkdir(path.join(appName, 'app-config'), function () {
-            request.post('https://allcountjs.com/api/app-template-for-cli-init', {json: packageJson}, function (err, httpResponse, body) {
-                var fileCounter = 0;
-                body.files.forEach(function (file) {
-                    write(path.join(appName, 'app-config', file.fileName), file.content, 0666, function () {
-                        fileCounter++;
-                        if (body.files.length === fileCounter) {
-                            var prompt = launchedFromCmd() ? '>' : '$';
-                            console.log();
-                            console.log('   install dependencies:');
-                            console.log('     %s cd %s && npm install', prompt, appName);
-                            console.log();
-                            console.log('   run the app:');
-                            var mongoUrl = "mongodb://localhost:27017/" + appName;
-                            if (launchedFromCmd()) {
-                                console.log('     %s SET DB_URL=%s:* & npm start', prompt, mongoUrl);
-                            } else {
-                                console.log('     %s DB_URL=%s:* npm start', prompt, mongoUrl);
-                            }
-                            console.log();
-                            console.log('   or');
-                            console.log('     %s allcountjs run', prompt);
-                            console.log();
-                        }
-                    });
-                });
+
+            const templateFile = path.join(__dirname, 'templates','hello.js');
+            fs.copyFile(templateFile, path.join(appName, 'app-config','hello.js'), function() {
+                var prompt = launchedFromCmd() ? '>' : '$';
+                console.log();
+                console.log('   install dependencies:');
+                console.log('     %s cd %s && npm install', prompt, appName);
+                console.log();
+                console.log('   run the app:');
+                var mongoUrl = "mongodb://localhost:27017/" + appName;
+                if (launchedFromCmd()) {
+                    console.log('     %s SET DB_URL=%s:* & npm start', prompt, mongoUrl);
+                } else {
+                    console.log('     %s DB_URL=%s:* npm start', prompt, mongoUrl);
+                }
+                console.log();
+                console.log('   or');
+                console.log('     %s allcountjs run', prompt);
+                console.log();
             });
         });
     });

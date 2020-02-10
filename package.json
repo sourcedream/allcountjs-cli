@@ -1,6 +1,6 @@
 {
   "name": "@sourcedream/allcountjs-cli",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "AllcountJS command line interface",
   "main": "./bin/allcount.js",
   "scripts": {
